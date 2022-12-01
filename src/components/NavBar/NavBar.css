@@ -1,0 +1,14 @@
+.logo_img{
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: -12px;
+}
+.navbar {
+    height: fit-content;
+}
+.react-select{
+    z-index: 1000;
+    min-width: 15rem;
+}
