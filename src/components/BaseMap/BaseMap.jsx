@@ -9,6 +9,7 @@ import "@changey/react-leaflet-markercluster/dist/styles.min.css";
 import './BaseMap.css'
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { LocationMarker } from "../LocationMarker/LocationMarker";
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow
@@ -86,33 +87,7 @@ const POSITION_CLASSES = {
     )
   }
 
- export default function BaseMap({data}) {
-    var icon_size = [25, 25]
-    var icon_clinics = L.icon({
-      iconUrl: require('../../assets/icons/clinics.png'),
-      iconSize:     icon_size, // size of the icon
-    });
-    var icon_pharmas = L.icon({
-      iconUrl: require('../../assets/icons/pharmas.png'),
-      iconSize:     icon_size, // size of the icon
-    });
-    var icon_dentists = L.icon({
-      iconUrl: require('../../assets/icons/dentists.png'),
-      iconSize:     icon_size, // size of the icon
-    });
-    var icon_labos = L.icon({
-      iconUrl: require('../../assets/icons/laboratoires.png'),
-      iconSize:     icon_size, // size of the icon
-    });
-    var icon_opticians = L.icon({
-      iconUrl: require('../../assets/icons/opticiens.png'),
-      iconSize:     icon_size, // size of the icon
-    });
-    var icon_transfusion = L.icon({
-      iconUrl: require('../../assets/icons/transfusion.png'),
-      iconSize:     icon_size, // size of the icon
-    });
-    var icons_array = [icon_clinics, icon_pharmas, icon_dentists, icon_labos, icon_opticians, icon_transfusion]
+ export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound}) {
     return (
       <MapContainer className="map_container" center={[33.9724816,-6.7464094]} zoom={11} scrollWheelZoom={true}>
         <TileLayer
@@ -120,11 +95,19 @@ const POSITION_CLASSES = {
         />
         {data.map(item=>{
           return (<MarkerClusterGroup key={data.indexOf(item)}>
-            {item.map(e=>{
-              return (<Marker icon={icons_array[data.indexOf(item)]} key={item.indexOf(e)} position={[e.lat, e.lng]} />)
+            {item.data.map(e=>{
+              return (<Marker icon={item.icon} key={item.data.indexOf(e)} 
+              position={[e.lat, e.lng]}
+              eventHandlers={{
+                click: (i) => {
+                  handleMarkerClick(e)
+                },
+              }} />)
             })}
         </MarkerClusterGroup>)
         })}
+        {showRouting ? <LocationMarker gotoLoc={gotoLoc} getRoutingInfo={getRoutingInfo} 
+        handleLocationFound={handleLocationFound}/> : <></>}
         <MinimapControl data={data} position="topright" />
       </MapContainer>
     )

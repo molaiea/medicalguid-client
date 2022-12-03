@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { components } from "react-select";
 import { default as ReactSelect } from "react-select";
+import Form from 'react-bootstrap/Form';
 import './NavBar.css'
 
 const Option = (props) => {
@@ -21,7 +22,7 @@ const Option = (props) => {
   );
 };
 
-function NavBar({toggleOptions}) {
+function NavBar({toggleOptions, getSearchQuery, searchResult}) {
   const categories = [
     { value: "clinics", label: "Cliniques" },
     { value: "dentists", label: "Dentistes" },
@@ -30,35 +31,19 @@ function NavBar({toggleOptions}) {
     { value: "pharmacies", label: "Pharmacies" },
     { value: "transfusion", label: "Centres de transfusion sanguine" }
   ];
-  
+  var myarr = [{name:"eeee", id:2}, {name:"eerte", id:4}]
   return (
-    <>
-    <Navbar bg="dark" variant="dark" expand="lg" className='navbar'>
+    
+    <div className="nav_container">
+      <Navbar bg="dark" variant="dark" expand="lg" className='navbar'>
         <Container fluid>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand href="/">
           <img src={require('../../assets/icon.png')} alt="icon" className="logo_img"/>MedicalGuide</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-dark-example" />
           <Navbar.Collapse id="navbar-dark-example">
           <Nav className="me-auto">
-            <Nav.Link href="/home">
-            Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-            <NavDropdown
-              id="nav-dropdown-dark-example"
-              title="Dropdown"
-              menuVariant="dark"
-            >
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+            
+            
             <ReactSelect className="react-select"
           options={categories}
           isMulti
@@ -70,11 +55,63 @@ function NavBar({toggleOptions}) {
           onChange={toggleOptions}
           allowSelectAll={true}
         />
+        <NavDropdown
+              id="nav-dropdown-dark-example"
+              title="Détails"
+              menuVariant="dark"
+            >
+              <NavDropdown.Item href="#action/3.1">
+              <Nav.Link href="#features">Cliniques</Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+              <Nav.Link href="#features">Pharmacies</Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">
+              <Nav.Link href="#features">Dentistes</Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">
+              <Nav.Link href="#features">Opticiens</Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">
+              <Nav.Link href="#features">Laboratoires d'analyses médicales</Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">
+              <Nav.Link href="#features">Centres de transfusion sanguine</Nav.Link>
+              </NavDropdown.Item>
+            </NavDropdown>
+            
+            <Form className="d-flex">
+            <Form.Control
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+              onChange={(e)=>{
+                myarr = e.target.value;
+                getSearchQuery(e.target.value)}}
+            />
+            
+          </Form>
+            
           </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </>
+      <div style={{visibility: "hidden"}} className="search_container">
+      <ul>
+          {searchResult.map(item=>{return (<li>{item.name}
+            <hr
+        style={{
+          background: 'black',
+          color: 'black',
+          borderColor: 'black',
+          height: '1px',
+        }}
+      /></li>)})}
+      </ul>
+      </div>
+    </div>
+    
   );
 }
 

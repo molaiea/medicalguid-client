@@ -1,0 +1,16 @@
+.sidebar {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+
+.sidebar img {
+  border-radius: 10px;
+  max-width: 100%;
+  height: 15rem;
+}
+
+.title {
+  font-size: xx-large;
+  text-transform: capitalize;
+}
