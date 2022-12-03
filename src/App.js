@@ -29,16 +29,28 @@ class App extends React.Component {
       eta:"",
       instructions:{},
       search_query:"",
-      search_items: []
+      search_items: {},
+      searching: false,
+      search_found: false,
+      search_center: []
     }
   }
 
+  onSearchFound = (e)=>{
+    this.setState({
+      search_found: true,
+      search_center: e,
+      searching: false,
+      search_items: []
+    })
+    document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
+    document.getElementById("seach_bar").value=""
+  }
+
   toggleOptions = (e)=>{
-    console.log(e)
     this.setState({toggle_cat: 1, selected_options: e})
   }
   handleMarkerClick = (e)=>{
-    console.log(e)
     this.setState({
       marker_clicked: true,
       marker_info: e,
@@ -69,18 +81,19 @@ class App extends React.Component {
     
   }
   getSearchQuery = (e)=>{
-    console.log(e)
-    
-    fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchpost?search_query=${e}`, 
-    {method: 'get'})
-    .then(res=>res.json())
-    .then(res=>{
-      console.log(res)
-      this.setState({
-        search_items: res
+    if(e!=""){
+      fetch(`https://medicalguide-api-production.up.railway.app/api/get/search?search_query=${e}`, 
+      {method: 'get'})
+      .then(res=>res.json())
+      .then(res=>{      
+        this.setState({
+          search_items: res,
+          searching: true
+        })
       })
-    })
-    document.getElementsByClassName("search_container")[0].style.visibility = "visible";
+  
+    }
+    document.getElementsByClassName("search_container")[0].style.visibility = e=="" ? "hidden" : "visible";
     
   }
   getRoutingInfo = ()=>{
@@ -102,37 +115,52 @@ class App extends React.Component {
         labos: res.laboratories_res,
         opticians: res.opticians_res,
         transfusion: res.transfusion_res,
-        is_loaded: 1
+        is_loaded: 1,
       })
     })
   }
 
   
   render() {
-    if (this.state.toggle_cat == 0 && this.state.search_items==[]){
-      var data = [{data: this.state.clinics, icon: Icons['clinics']},
+    var data = [{data: this.state.clinics, icon: Icons['clinics']},
                   {data: this.state.pharmacies, icon: Icons['pharmacies']}, 
                   {data: this.state.dentists, icon: Icons['dentists']}, 
                   {data: this.state.labos, icon: Icons['labos']}, 
                   {data: this.state.opticians, icon: Icons['opticians']}, 
                   {data: this.state.transfusion, icon: Icons['transfusion']}]
-    } else if (this.state.toggle_cat != 0 && this.state.search_items==[]){
+
+    if(this.state.searching){
       var data = []
+      for ( const prop in this.state.search_items) {
+        data.push({data: this.state.search_items[prop], icon: Icons[prop]})
+      }
+    } else{
+      if(this.state.toggle_cat == 1){
+        var data = []
       this.state.selected_options.forEach((item, i)=>{
         data.push({data: this.state[this.state.selected_options[i].value], icon: Icons[item.value]})
       })
-    }else if(this.state.search_items!=[]){
-      var data = []
-      data.push({data:this.state.search_items, icon: Icons['clinics']})
-      
+      }
     }
+    // if (this.state.toggle_cat == 1 && this.state.search_items==[]){
+    //   var data = []
+    //   this.state.selected_options.forEach((item, i)=>{
+    //     data.push({data: this.state[this.state.selected_options[i].value], icon: Icons[item.value]})
+    //   })
+    // }else if(this.state.searching){
+      
+
+    // }
 
     return (
       <div className="App">
         <div className="sidebar">
     </div>
         <NavBar toggleOptions = {this.toggleOptions} 
-        getSearchQuery={this.getSearchQuery} searchResult={this.state.search_items}/>
+        getSearchQuery={this.getSearchQuery} 
+        searchResult={this.state.searching ? this.state.search_items.clinics : []}
+        search_found={this.state.search_found}
+        onSearchFound={this.onSearchFound}/>
         {this.state.is_loaded == 0 ? <LoadingPage/> : 
         <>
         <InfoSideComponent scroll="true" backdrop="false" 
@@ -143,7 +171,8 @@ class App extends React.Component {
         showRouting={this.state.show_routing}
         gotoLoc={[this.state.marker_info.lat, this.state.marker_info.lng]}
         getRoutingInfo={this.getRoutingInfo}
-        handleLocationFound={this.handleLocationFound}/>
+        handleLocationFound={this.handleLocationFound}
+        search_center = {this.state.search_center!= [] ? this.state.search_center : [33.9724816,-6.7464094]}/>
         </>
         }
         

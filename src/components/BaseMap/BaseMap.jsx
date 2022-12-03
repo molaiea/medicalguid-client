@@ -4,12 +4,13 @@ import { useMap, useMapEvent } from 'react-leaflet/hooks'
 import { useEventHandlers } from '@react-leaflet/core'
 import { useState, useMemo, useCallback } from "react";
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
-import L from 'leaflet'
+import L, { geoJSON } from 'leaflet'
 import "@changey/react-leaflet-markercluster/dist/styles.min.css";
 import './BaseMap.css'
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { LocationMarker } from "../LocationMarker/LocationMarker";
+import rabat from '../../assets/data/rabat.json'
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow
@@ -53,9 +54,12 @@ const POSITION_CLASSES = {
     return <Rectangle bounds={bounds} pathOptions={BOUNDS_STYLE} />
   }
   
-  function MinimapControl({ position, zoom, data }) {
+  function MinimapControl({ position, zoom, data, search_center}) {
     const parentMap = useMap()
     const mapZoom = zoom || 0
+    //const centermap = search_center.length != 0 ? search_center : [34, -7]
+    //parentMap.setView(centermap, zoommap)
+    //parentMap.center(centermap);
     // data.map((category)=>{
       
     // });
@@ -87,9 +91,11 @@ const POSITION_CLASSES = {
     )
   }
 
- export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound}) {
-    return (
-      <MapContainer className="map_container" center={[33.9724816,-6.7464094]} zoom={11} scrollWheelZoom={true}>
+ export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound, search_center}) {
+  const centermap = search_center.length != 0 ? search_center : [34, -6]  
+  const zoommap = search_center.length != 0 ? 18 : 10
+  return (
+      <MapContainer className="map_container" center={centermap} zoom={zoommap} scrollWheelZoom={true}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
@@ -108,7 +114,7 @@ const POSITION_CLASSES = {
         })}
         {showRouting ? <LocationMarker gotoLoc={gotoLoc} getRoutingInfo={getRoutingInfo} 
         handleLocationFound={handleLocationFound}/> : <></>}
-        <MinimapControl data={data} position="topright" />
+        <MinimapControl zoom={10} data={data} position="topright" search_center={search_center}/>
       </MapContainer>
     )
   }

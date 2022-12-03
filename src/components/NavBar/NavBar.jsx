@@ -5,6 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { components } from "react-select";
 import { default as ReactSelect } from "react-select";
 import Form from 'react-bootstrap/Form';
+import ListGroup from 'react-bootstrap/ListGroup';
 import './NavBar.css'
 
 const Option = (props) => {
@@ -22,7 +23,7 @@ const Option = (props) => {
   );
 };
 
-function NavBar({toggleOptions, getSearchQuery, searchResult}) {
+function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound}) {
   const categories = [
     { value: "clinics", label: "Cliniques" },
     { value: "dentists", label: "Dentistes" },
@@ -83,6 +84,7 @@ function NavBar({toggleOptions, getSearchQuery, searchResult}) {
             <Form className="d-flex">
             <Form.Control
               type="search"
+              id="seach_bar"
               placeholder="Search"
               className="me-2"
               aria-label="Search"
@@ -90,7 +92,6 @@ function NavBar({toggleOptions, getSearchQuery, searchResult}) {
                 myarr = e.target.value;
                 getSearchQuery(e.target.value)}}
             />
-            
           </Form>
             
           </Nav>
@@ -98,8 +99,11 @@ function NavBar({toggleOptions, getSearchQuery, searchResult}) {
         </Container>
       </Navbar>
       <div style={{visibility: "hidden"}} className="search_container">
+      
       <ul>
-          {searchResult.map(item=>{return (<li>{item.name}
+          {searchResult.map(item=>{return (<li key={searchResult.indexOf(item)} onClick={function (e){
+              onSearchFound([item.lat, item.lng])
+            }}>{item.name}
             <hr
         style={{
           background: 'black',
