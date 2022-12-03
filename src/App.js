@@ -82,7 +82,18 @@ class App extends React.Component {
   }
   getSearchQuery = (e)=>{
     if(e!=""){
-      fetch(`https://medicalguide-api-production.up.railway.app/api/get/search?search_query=${e}`, 
+      if(this.state.selected_options == [])
+      {fetch(`https://medicalguide-api-production.up.railway.app/api/get/search?search_query=${e}`, 
+      {method: 'get'})
+      .then(res=>res.json())
+      .then(res=>{      
+        this.setState({
+          search_items: res,
+          searching: true
+        })
+      })}
+      else{
+        fetch(`https://medicalguide-api-production.up.railway.app/api/get/search?search_query=${e}&elements`, 
       {method: 'get'})
       .then(res=>res.json())
       .then(res=>{      
@@ -91,7 +102,7 @@ class App extends React.Component {
           searching: true
         })
       })
-  
+      }
     }
     document.getElementsByClassName("search_container")[0].style.visibility = e=="" ? "hidden" : "visible";
     
