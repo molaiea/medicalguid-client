@@ -32,7 +32,10 @@ class App extends React.Component {
       search_items: {},
       searching: false,
       search_found: false,
-      search_center: []
+      search_center: [],
+      buffer_radius: 0,
+      search_by_buffer: false,
+      user_position: []
     }
   }
 
@@ -47,7 +50,13 @@ class App extends React.Component {
     document.getElementById("seach_bar").value=""
   }
 
+  handleBufferChange = (e)=>{
+    this.setState({
+      buffer_radius: e
+    })
+  }
   toggleOptions = (e)=>{
+    console.log(e)
     this.setState({toggle_cat: 1, selected_options: e})
   }
   handleMarkerClick = (e)=>{
@@ -82,28 +91,41 @@ class App extends React.Component {
   }
   getSearchQuery = (e)=>{
     if(e!=""){
-      if(this.state.selected_options == [])
+      
+      if(this.state.selected_options.length == 0)
       {fetch(`https://medicalguide-api-production.up.railway.app/api/get/search?search_query=${e}`, 
       {method: 'get'})
       .then(res=>res.json())
       .then(res=>{      
+        console.log(res)
         this.setState({
           search_items: res,
           searching: true
         })
+        
+        
       })}
       else{
-        fetch(`https://medicalguide-api-production.up.railway.app/api/get/search?search_query=${e}&elements`, 
+        this.state.selected_options.forEach((item, idx)=>{
+          fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbyfilter?search_query=${e}&table=${item.value}`, 
       {method: 'get'})
       .then(res=>res.json())
       .then(res=>{      
+        console.log(res)
         this.setState({
-          search_items: res,
           searching: true
         })
+        this.state.search_items[item.value] = res
       })
+        })
+        
       }
     }
+    else if(e==''){
+      this.setState({
+        searching: false
+      })
+    }   
     document.getElementsByClassName("search_container")[0].style.visibility = e=="" ? "hidden" : "visible";
     
   }
@@ -130,7 +152,9 @@ class App extends React.Component {
       })
     })
   }
-
+  searchByBuffer(){
+    
+  }
   
   render() {
     var data = [{data: this.state.clinics, icon: Icons['clinics']},
@@ -139,7 +163,43 @@ class App extends React.Component {
                   {data: this.state.labos, icon: Icons['labos']}, 
                   {data: this.state.opticians, icon: Icons['opticians']}, 
                   {data: this.state.transfusion, icon: Icons['transfusion']}]
+    $(".map_container").on('click', ()=>{
+      
+      document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
+    })
+    $("#buffer_button").on('click', ()=>{
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            getPosition,
+            positionError
+        )
+    }
+    var bufferInput = document.getElementById("buffer");
+    bufferInput.addEventListener("keydown", function (e) {
+      
+        if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
+          e.preventDefault()  
+          console.log(e);
+        }
+    });
+    function getPosition(position) {
+        
+        $("#buffer").css("visibility", "visible")
+        $("#buffer").css("margin-left", "10px")
+        this.setState({user_position: [position.coords.latitude, position.coords.longitude]})
+    }
 
+    function positionError(error) {
+        if (error.PERMISSION_DENIED) {alert('Location services are off. Please enable location services, or use zip code search.');}
+
+    }
+        
+    })
+
+    $(".react-select").on('click', ()=>{
+      
+      document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
+    })
     if(this.state.searching){
       var data = []
       for ( const prop in this.state.search_items) {
@@ -153,12 +213,6 @@ class App extends React.Component {
       })
       }
     }
-    // if (this.state.toggle_cat == 1 && this.state.search_items==[]){
-    //   var data = []
-    //   this.state.selected_options.forEach((item, i)=>{
-    //     data.push({data: this.state[this.state.selected_options[i].value], icon: Icons[item.value]})
-    //   })
-    // }else if(this.state.searching){
       
 
     // }
@@ -169,9 +223,10 @@ class App extends React.Component {
     </div>
         <NavBar toggleOptions = {this.toggleOptions} 
         getSearchQuery={this.getSearchQuery} 
-        searchResult={this.state.searching ? this.state.search_items.clinics : []}
+        searchResult={this.state.searching ? this.state.search_items : []}
         search_found={this.state.search_found}
-        onSearchFound={this.onSearchFound}/>
+        onSearchFound={this.onSearchFound}
+        handleBufferChange={this.handleBufferChange}/>
         {this.state.is_loaded == 0 ? <LoadingPage/> : 
         <>
         <InfoSideComponent scroll="true" backdrop="false" 

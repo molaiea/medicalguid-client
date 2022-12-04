@@ -5,6 +5,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { components } from "react-select";
 import { default as ReactSelect } from "react-select";
 import Form from 'react-bootstrap/Form';
+import TextField from '@mui/material/TextField';
+import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import './NavBar.css'
 
@@ -23,7 +25,7 @@ const Option = (props) => {
   );
 };
 
-function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound}) {
+function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound, handleBufferChange}) {
   const categories = [
     { value: "clinics", label: "Cliniques" },
     { value: "dentists", label: "Dentistes" },
@@ -32,6 +34,10 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
     { value: "pharmacies", label: "Pharmacies" },
     { value: "transfusion", label: "Centres de transfusion sanguine" }
   ];
+  var mySearchRes = []
+  Object.keys(searchResult).forEach((item, idx)=>{
+    mySearchRes.push(...searchResult[item])
+  })
   var myarr = [{name:"eeee", id:2}, {name:"eerte", id:4}]
   return (
     
@@ -89,11 +95,25 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
               className="me-2"
               aria-label="Search"
               onChange={(e)=>{
-                myarr = e.target.value;
-                getSearchQuery(e.target.value)}}
+                getSearchQuery(e.target.value)
+              }}
             />
           </Form>
-            
+          <Button id="buffer_button" variant="light">Ou cherchez dans un rayon ▶</Button>
+          <Form className="d-flex" >
+            <Form.Control
+              type="number"
+              id="buffer"
+              style={{visibility: "hidden"}}
+              placeholder="Rayon en m"
+              className="me-2"
+              aria-label="Search"
+              onChange={(e)=>{
+                handleBufferChange(e.target.value)
+              }}
+            />
+          </Form>
+          
           </Nav>
           </Navbar.Collapse>
         </Container>
@@ -101,7 +121,7 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
       <div style={{visibility: "hidden"}} className="search_container">
       
       <ul>
-          {searchResult.map(item=>{return (<li key={searchResult.indexOf(item)} onClick={function (e){
+          {mySearchRes.map(item=>{return (<li key={mySearchRes.indexOf(item)} onClick={function (e){
               onSearchFound([item.lat, item.lng])
             }}>{item.name}
             <hr
