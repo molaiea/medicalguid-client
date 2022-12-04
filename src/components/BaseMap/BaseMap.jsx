@@ -97,7 +97,7 @@ const POSITION_CLASSES = {
   return (
       <MapContainer className="map_container" center={centermap} zoom={zoommap} scrollWheelZoom={true}>
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://api.mapbox.com/styles/v1/nafissa1809/clba1nbmd000s14pidvnzn2fx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmFmaXNzYTE4MDkiLCJhIjoiY2xiYTFtZDJkMTBlZjNxcWh1aHdwbnp0aCJ9.OBCk9K8H_5L_JfgvBgT8jQ"
         />
         {data.map(item=>{
           return (<MarkerClusterGroup key={data.indexOf(item)}>
