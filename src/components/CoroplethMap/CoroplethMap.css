@@ -1,0 +1,21 @@
+.leaflet-container {
+    color: black;
+}
+
+.leaflet-bar {
+    background-color: white;
+}
+
+/* .leaflet-routing-container{
+    visibility: hidden;
+} */
+
+.leaflet-interactive{
+    stroke: rgb(0, 0, 0);
+    stroke-width: 1;
+    stroke-linecap: round;
+    transition: all 1s;
+}
+.leaflet-interactive:hover{
+    stroke-width: 3;
+}

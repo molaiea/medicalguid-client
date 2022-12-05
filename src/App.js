@@ -6,6 +6,11 @@ import LoadingPage from './components/LoadingPage/LoadingPage';
 import InfoSideComponent from './components/InfoSideComponent/InfoSideComponent';
 import Icons from './components/Icons/Icons';
 import $ from 'jquery'
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Button from '@mui/material/Button';
+import Slider from './components/Slider/Slider';
+import './components/CoroplethMap/CoroplethMap'
+import CoroplethMap from './components/CoroplethMap/CoroplethMap';
 class App extends React.Component {
 
   constructor(){
@@ -153,9 +158,14 @@ class App extends React.Component {
     })
   }
   searchByBuffer(){
-    
+
   }
-  
+ toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+  };
   render() {
     var data = [{data: this.state.clinics, icon: Icons['clinics']},
                   {data: this.state.pharmacies, icon: Icons['pharmacies']}, 
@@ -239,10 +249,12 @@ class App extends React.Component {
         getRoutingInfo={this.getRoutingInfo}
         handleLocationFound={this.handleLocationFound}
         search_center = {this.state.search_center!= [] ? this.state.search_center : [33.9724816,-6.7464094]}/>
+        <Slider/>
         </>
         }
         
       </div>
+    // <CoroplethMap/>
     );
   }
   

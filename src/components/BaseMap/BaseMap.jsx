@@ -10,7 +10,6 @@ import './BaseMap.css'
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { LocationMarker } from "../LocationMarker/LocationMarker";
-import rabat from '../../assets/data/rabat.json'
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow
@@ -57,13 +56,6 @@ const POSITION_CLASSES = {
   function MinimapControl({ position, zoom, data, search_center}) {
     const parentMap = useMap()
     const mapZoom = zoom || 0
-    //const centermap = search_center.length != 0 ? search_center : [34, -7]
-    //parentMap.setView(centermap, zoommap)
-    //parentMap.center(centermap);
-    // data.map((category)=>{
-      
-    // });
-    // Memoize the minimap so it's not affected by position changes
     const minimap = useMemo(
       () => (
         <MapContainer
@@ -95,7 +87,7 @@ const POSITION_CLASSES = {
   const centermap = search_center.length != 0 ? search_center : [34, -6]  
   const zoommap = search_center.length != 0 ? 18 : 10
   return (
-      <MapContainer className="map_container" center={centermap} zoom={zoommap} scrollWheelZoom={true}>
+      <MapContainer className="map_container" center={[33.9594653,-6.8528503]} zoom={11} scrollWheelZoom={true}>
         <TileLayer
           url="https://api.mapbox.com/styles/v1/nafissa1809/clba1nbmd000s14pidvnzn2fx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmFmaXNzYTE4MDkiLCJhIjoiY2xiYTFtZDJkMTBlZjNxcWh1aHdwbnp0aCJ9.OBCk9K8H_5L_JfgvBgT8jQ"
         />

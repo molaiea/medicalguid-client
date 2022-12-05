@@ -43,3 +43,11 @@
 .leaflet-container {
   height: 100%;
 }
+
+button.btn.btn-primary.showmap {
+  position: absolute;
+  z-index: 1000;
+  bottom: 0;
+  align-self: bottom;
+  border-radius: 0rem 0.5rem 0.5rem 0rem;
+}
