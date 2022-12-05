@@ -97,6 +97,12 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
               onChange={(e)=>{
                 getSearchQuery(e.target.value)
               }}
+              onKeyDown={(e)=>{
+                if(e.key=="Enter"){
+                  e.preventDefault()
+                }
+                
+              }}
             />
           </Form>
           <Button id="buffer_button" variant="light">Ou cherchez dans un rayon ▶</Button>

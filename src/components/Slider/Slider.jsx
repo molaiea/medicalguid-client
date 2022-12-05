@@ -14,11 +14,11 @@ import './Slider.css'
       <>
         <Button variant="primary" className='showmap' onClick={handleShow}>
             <span>Voir des statistiques</span>
-        <div class="center-con">
-    <div class="round">
+        <div className="center-con">
+    <div className="round">
         <div id="cta">
-            <span class="arrow primera next "></span>
-            <span class="arrow segunda next "></span>
+            <span className="arrow primera next "></span>
+            <span className="arrow segunda next "></span>
         </div>
     </div>
 </div>

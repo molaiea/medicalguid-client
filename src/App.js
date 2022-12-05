@@ -68,6 +68,7 @@ class App extends React.Component {
       .then(res=>{      
         console.log(res)
         this.setState({
+          search_by_buffer: true,
           buffer_result: res
         })
       })  
@@ -91,8 +92,7 @@ class App extends React.Component {
     })
   }
   toggleOptions = (e)=>{
-    console.log(e)
-    this.setState({toggle_cat: 1, selected_options: e})
+    this.setState({toggle_cat: e.length==0 ? 0 : 1, selected_options: e})
   }
   handleMarkerClick = (e)=>{
     this.setState({
@@ -251,7 +251,7 @@ class App extends React.Component {
         showinfo={this.state.marker_clicked} info={this.state.marker_info} 
         handleClose={this.handleClose}
         routingClick={this.handleRoutingClicked}/>
-        <BaseMap className="map" data={data} bufferData={bufferdata} handleMarkerClick={this.handleMarkerClick} 
+        <BaseMap className="map" data={this.state.search_by_buffer ? bufferdata : data} handleMarkerClick={this.handleMarkerClick} 
         showRouting={this.state.show_routing}
         gotoLoc={[this.state.marker_info.lat, this.state.marker_info.lng]}
         getRoutingInfo={this.getRoutingInfo}
