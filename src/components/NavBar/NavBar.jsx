@@ -25,7 +25,7 @@ const Option = (props) => {
   );
 };
 
-function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound, handleBufferChange}) {
+function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound, handleBufferChange, getBuffer}) {
   const categories = [
     { value: "clinics", label: "Cliniques" },
     { value: "dentists", label: "Dentistes" },
@@ -109,7 +109,15 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
               className="me-2"
               aria-label="Search"
               onChange={(e)=>{
+                console.log(e.target.value)
                 handleBufferChange(e.target.value)
+              }}
+              onKeyDown={(e)=>{
+                if(e.key=="Enter"){
+                  e.preventDefault()
+                getBuffer(e.target.value)
+                }
+                
               }}
             />
           </Form>

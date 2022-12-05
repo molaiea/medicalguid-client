@@ -85,5 +85,7 @@ span{
 
 .mymapcontainer{
     height: 50%;
-    width: 50%;
+    width: 40%;
+    border-radius: 0 10px 0 0;
+    box-shadow: 2px 5px 15px rgb(0 0 0 / 0.2);
 }

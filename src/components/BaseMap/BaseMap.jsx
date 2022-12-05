@@ -83,15 +83,16 @@ const POSITION_CLASSES = {
     )
   }
 
- export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound, search_center}) {
+ export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound, search_center, bufferData}) {
   const centermap = search_center.length != 0 ? search_center : [34, -6]  
   const zoommap = search_center.length != 0 ? 18 : 10
+  const mydata = bufferData.data ? bufferData : data
   return (
       <MapContainer className="map_container" center={[33.9594653,-6.8528503]} zoom={11} scrollWheelZoom={true}>
         <TileLayer
           url="https://api.mapbox.com/styles/v1/nafissa1809/clba1nbmd000s14pidvnzn2fx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmFmaXNzYTE4MDkiLCJhIjoiY2xiYTFtZDJkMTBlZjNxcWh1aHdwbnp0aCJ9.OBCk9K8H_5L_JfgvBgT8jQ"
         />
-        {data.map(item=>{
+        {mydata.map(item=>{
           return (<MarkerClusterGroup key={data.indexOf(item)}>
             {item.data.map(e=>{
               return (<Marker icon={item.icon} key={item.data.indexOf(e)} 
@@ -106,7 +107,7 @@ const POSITION_CLASSES = {
         })}
         {showRouting ? <LocationMarker gotoLoc={gotoLoc} getRoutingInfo={getRoutingInfo} 
         handleLocationFound={handleLocationFound}/> : <></>}
-        <MinimapControl zoom={10} data={data} position="topright" search_center={search_center}/>
+        <MinimapControl zoom={10} position="topright" search_center={search_center}/>
       </MapContainer>
     )
   }

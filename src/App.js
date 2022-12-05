@@ -15,6 +15,7 @@ class App extends React.Component {
 
   constructor(){
     super()
+    
     this.state = {
       is_loaded: 0,
       toggle_cat: 0,
@@ -40,10 +41,39 @@ class App extends React.Component {
       search_center: [],
       buffer_radius: 0,
       search_by_buffer: false,
-      user_position: []
+      user_position: [],
+      buffer_result: []
     }
   }
 
+  getUserPosition = ()=>{
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+          (position)=>{
+            this.setState({user_position: [position.coords.latitude, position.coords.longitude]})
+          },
+          positionError
+      )
+  }
+  function positionError(error) {
+      if (error.PERMISSION_DENIED) {alert('Location services are off. Please enable location services, or use zip code search.');}
+
+  }
+  }
+  getBuffer = (e)=>{
+      
+      fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=clinics&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
+      {method: 'get'})
+      .then(res=>res.json())
+      .then(res=>{      
+        console.log(res)
+        this.setState({
+          buffer_result: res
+        })
+      })  
+
+    }
+  
   onSearchFound = (e)=>{
     this.setState({
       search_found: true,
@@ -173,39 +203,17 @@ class App extends React.Component {
                   {data: this.state.labos, icon: Icons['labos']}, 
                   {data: this.state.opticians, icon: Icons['opticians']}, 
                   {data: this.state.transfusion, icon: Icons['transfusion']}]
+    var bufferdata = [{data: this.state.buffer_result, icon: Icons['clinics']}]
     $(".map_container").on('click', ()=>{
       
       document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
     })
     $("#buffer_button").on('click', ()=>{
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            getPosition,
-            positionError
-        )
-    }
-    var bufferInput = document.getElementById("buffer");
-    bufferInput.addEventListener("keydown", function (e) {
-      
-        if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
-          e.preventDefault()  
-          console.log(e);
-        }
-    });
-    function getPosition(position) {
-        
-        $("#buffer").css("visibility", "visible")
-        $("#buffer").css("margin-left", "10px")
-        this.setState({user_position: [position.coords.latitude, position.coords.longitude]})
-    }
-
-    function positionError(error) {
-        if (error.PERMISSION_DENIED) {alert('Location services are off. Please enable location services, or use zip code search.');}
-
-    }
-        
+      $("#buffer").css("visibility", "visible")
+      $("#buffer").css("margin-left", "10px")
+        this.getUserPosition()
     })
-
+        
     $(".react-select").on('click', ()=>{
       
       document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
@@ -224,7 +232,6 @@ class App extends React.Component {
       }
     }
       
-
     // }
 
     return (
@@ -236,6 +243,7 @@ class App extends React.Component {
         searchResult={this.state.searching ? this.state.search_items : []}
         search_found={this.state.search_found}
         onSearchFound={this.onSearchFound}
+        getBuffer={this.getBuffer}
         handleBufferChange={this.handleBufferChange}/>
         {this.state.is_loaded == 0 ? <LoadingPage/> : 
         <>
@@ -243,7 +251,7 @@ class App extends React.Component {
         showinfo={this.state.marker_clicked} info={this.state.marker_info} 
         handleClose={this.handleClose}
         routingClick={this.handleRoutingClicked}/>
-        <BaseMap className="map" data={data} handleMarkerClick={this.handleMarkerClick} 
+        <BaseMap className="map" data={data} bufferData={bufferdata} handleMarkerClick={this.handleMarkerClick} 
         showRouting={this.state.show_routing}
         gotoLoc={[this.state.marker_info.lat, this.state.marker_info.lng]}
         getRoutingInfo={this.getRoutingInfo}
