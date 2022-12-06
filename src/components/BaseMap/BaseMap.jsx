@@ -107,7 +107,7 @@ const POSITION_CLASSES = {
         })}
         {showRouting ? <LocationMarker gotoLoc={gotoLoc} getRoutingInfo={getRoutingInfo} 
         handleLocationFound={handleLocationFound}/> : <></>}
-        {bufferRadius != 0 ? <Circle center={[34,-6]} radius={bufferRadius} /> : <></>}
+        {bufferRadius != 0 ? <Circle center={userPosition} radius={bufferRadius} /> : <></>}
         <MinimapControl zoom={10} position="topright"/>
       </MapContainer>
     )

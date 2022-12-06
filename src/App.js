@@ -282,7 +282,7 @@ class App extends React.Component {
         handleLocationFound={this.handleLocationFound}
         search_center = {this.state.search_center!= [] ? this.state.search_center : [33.9724816,-6.7464094]}
         bufferRadius = {this.state.buffer_radius}
-        userPosition = {this.state.user_position}/>
+        userPosition = {this.state.user_position != [] ? this.state.user_position : [33.976501,-6.8673219]}/>
         <Slider/>
         </>
         }
