@@ -19,3 +19,12 @@
 .leaflet-interactive:hover{
     stroke-width: 3;
 }
+
+.legende {
+    z-index: 9999;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 10rem;
+}
+

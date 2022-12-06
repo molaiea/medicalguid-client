@@ -1,5 +1,5 @@
 import React from "react";
-import { MapContainer, TileLayer, Rectangle, Marker } from 'react-leaflet'
+import { MapContainer, TileLayer, Rectangle, Marker, Circle } from 'react-leaflet'
 import { useMap, useMapEvent } from 'react-leaflet/hooks'
 import { useEventHandlers } from '@react-leaflet/core'
 import { useState, useMemo, useCallback } from "react";
@@ -53,7 +53,7 @@ const POSITION_CLASSES = {
     return <Rectangle bounds={bounds} pathOptions={BOUNDS_STYLE} />
   }
   
-  function MinimapControl({ position, zoom, data, search_center}) {
+  function MinimapControl({ position, zoom}) {
     const parentMap = useMap()
     const mapZoom = zoom || 0
     const minimap = useMemo(
@@ -83,9 +83,10 @@ const POSITION_CLASSES = {
     )
   }
 
- export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound, search_center}) {
+ export default function BaseMap({data, handleMarkerClick, showRouting, gotoLoc, getRoutingInfo, handleLocationFound, search_center, bufferRadius, userPosition}) {
   const centermap = search_center.length != 0 ? search_center : [34, -6]  
   const zoommap = search_center.length != 0 ? 18 : 10
+
   return (
       <MapContainer className="map_container" center={[33.9594653,-6.8528503]} zoom={11} scrollWheelZoom={true}>
         <TileLayer
@@ -106,7 +107,8 @@ const POSITION_CLASSES = {
         })}
         {showRouting ? <LocationMarker gotoLoc={gotoLoc} getRoutingInfo={getRoutingInfo} 
         handleLocationFound={handleLocationFound}/> : <></>}
-        <MinimapControl zoom={10} position="topright" search_center={search_center}/>
+        {bufferRadius != 0 ? <Circle center={[34,-6]} radius={bufferRadius} /> : <></>}
+        <MinimapControl zoom={10} position="topright"/>
       </MapContainer>
     )
   }

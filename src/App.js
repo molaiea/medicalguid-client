@@ -5,12 +5,8 @@ import BaseMap from './components/BaseMap/BaseMap';
 import LoadingPage from './components/LoadingPage/LoadingPage';
 import InfoSideComponent from './components/InfoSideComponent/InfoSideComponent';
 import Icons from './components/Icons/Icons';
-import $ from 'jquery'
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import Button from '@mui/material/Button';
+import $ from 'jquery';
 import Slider from './components/Slider/Slider';
-import './components/CoroplethMap/CoroplethMap'
-import CoroplethMap from './components/CoroplethMap/CoroplethMap';
 class App extends React.Component {
 
   constructor(){
@@ -61,18 +57,45 @@ class App extends React.Component {
   }
   }
   getBuffer = (e)=>{
-      
-      fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=clinics&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
+    if(e!=0){
+      if(this.state.selected_options.length == 0)
+    {
+      console.log(this.state.user_position)
+      var mytables = ['clinics', 'pharmacies', 'dentists', 'laboratories', 'opticians', 'transfusion']
+      mytables.map((item, idx)=>{
+        fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=${item}&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
       {method: 'get'})
       .then(res=>res.json())
       .then(res=>{      
-        console.log(res)
+        this.state.buffer_result.push({data: res, icon: Icons["clinics"]})
+      }).then(()=>{
         this.setState({
           search_by_buffer: true,
-          buffer_result: res
         })
-      })  
-
+      })
+    }
+    
+    )
+    console.log(this.state.buffer_result)
+    
+  }
+    else{
+      this.state.selected_options.forEach((item, idx)=>{
+        fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=${item}&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
+    {method: 'get'})
+    .then(res=>res.json())
+    .then(res=>{      
+      console.log(res)
+      this.state.buffer_result.push({data: res, icon: Icons[item]})
+      this.setState({
+        search_by_buffer: true,
+      })
+      
+    })
+      })
+      
+    }
+    }
     }
   
   onSearchFound = (e)=>{
@@ -88,7 +111,9 @@ class App extends React.Component {
 
   handleBufferChange = (e)=>{
     this.setState({
-      buffer_radius: e
+      buffer_radius: e,
+      search_by_buffer: false,
+      buffer_result: []
     })
   }
   toggleOptions = (e)=>{
@@ -203,7 +228,6 @@ class App extends React.Component {
                   {data: this.state.labos, icon: Icons['labos']}, 
                   {data: this.state.opticians, icon: Icons['opticians']}, 
                   {data: this.state.transfusion, icon: Icons['transfusion']}]
-    var bufferdata = [{data: this.state.buffer_result, icon: Icons['clinics']}]
     $(".map_container").on('click', ()=>{
       
       document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
@@ -251,12 +275,14 @@ class App extends React.Component {
         showinfo={this.state.marker_clicked} info={this.state.marker_info} 
         handleClose={this.handleClose}
         routingClick={this.handleRoutingClicked}/>
-        <BaseMap className="map" data={this.state.search_by_buffer ? bufferdata : data} handleMarkerClick={this.handleMarkerClick} 
+        <BaseMap className="map" data={this.state.search_by_buffer ? this.state.buffer_result : data} handleMarkerClick={this.handleMarkerClick} 
         showRouting={this.state.show_routing}
         gotoLoc={[this.state.marker_info.lat, this.state.marker_info.lng]}
         getRoutingInfo={this.getRoutingInfo}
         handleLocationFound={this.handleLocationFound}
-        search_center = {this.state.search_center!= [] ? this.state.search_center : [33.9724816,-6.7464094]}/>
+        search_center = {this.state.search_center!= [] ? this.state.search_center : [33.9724816,-6.7464094]}
+        bufferRadius = {this.state.buffer_radius}
+        userPosition = {this.state.user_position}/>
         <Slider/>
         </>
         }
