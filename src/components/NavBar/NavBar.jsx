@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import './NavBar.css'
+import { useNavigate, BrowserRouter as Router } from 'react-router-dom';
 
 const Option = (props) => {
   return (
@@ -34,14 +35,15 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
     { value: "pharmacies", label: "Pharmacies" },
     { value: "transfusion", label: "Centres de transfusion sanguine" }
   ];
+  const navigate = useNavigate();
+
   var mySearchRes = []
   Object.keys(searchResult).forEach((item, idx)=>{
     mySearchRes.push(...searchResult[item])
   })
   var myarr = [{name:"eeee", id:2}, {name:"eerte", id:4}]
   return (
-    
-    <div className="nav_container">
+      <div className="nav_container">
       <Navbar bg="dark" variant="dark" expand="lg" className='navbar'>
         <Container fluid>
           <Navbar.Brand href="/">
@@ -67,23 +69,35 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
               title="Détails"
               menuVariant="dark"
             >
-              <NavDropdown.Item>
+              <NavDropdown.Item onClick={()=>{
+                navigate('/clinics');
+                handleRouting("/clinics")}}>
               <Nav.Link>Cliniques</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item>
+              <NavDropdown.Item onClick={()=>{
+                navigate('/pharmacies');
+                handleRouting("/pharmacies")}}>
               <Nav.Link>Pharmacies</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item>
-              <Nav.Link href="#features">Dentistes</Nav.Link>
+              <NavDropdown.Item onClick={()=>{
+                navigate('/dentists');
+                handleRouting("/dentists")}}>
+              <Nav.Link>Dentistes</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
-              <Nav.Link href="#features">Opticiens</Nav.Link>
+              <NavDropdown.Item onClick={()=>{
+                navigate('/opticians');
+                handleRouting("/opticians")}}>
+              <Nav.Link>Opticiens</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
-              <Nav.Link href="#features">Laboratoires d'analyses médicales</Nav.Link>
+              <NavDropdown.Item onClick={()=>{
+                navigate('/laboratories');
+                handleRouting("/laboratories")}}>
+              <Nav.Link >Laboratoires d'analyses médicales</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
-              <Nav.Link href="#features">Centres de transfusion sanguine</Nav.Link>
+              <NavDropdown.Item onClick={()=>{
+                navigate('/transfusion');
+                handleRouting("/transfusion")}}>
+              <Nav.Link >Centres de transfusion sanguine</Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
             
@@ -149,6 +163,7 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
       </ul>
       </div>
     </div>
+    
     
   );
 }

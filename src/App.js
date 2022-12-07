@@ -8,6 +8,8 @@ import Icons from './components/Icons/Icons';
 import $ from 'jquery';
 import Slider from './components/Slider/Slider';
 import ListPage from './components/ListPage/ListPage';
+import {  BrowserRouter as Router } from 'react-router-dom';
+import ListNav from './components/ListNav/ListNav';
 class App extends React.Component {
 
   constructor(){
@@ -40,11 +42,25 @@ class App extends React.Component {
       search_by_buffer: false,
       user_position: [],
       buffer_result: [],
-      routing: '/'
+      routing: '/',
+      routing_data: [],
     }
   }
 
   handleRoutingChange = (route)=>{
+    const myroute = route.split('/')[1]
+    fetch(`https://medicalguide-api-production.up.railway.app/get_table?table=${myroute}`, 
+      {method: 'get'})
+      .then(res=>res.json())
+      .then(res=>{      
+        console.log(res)
+        this.setState({
+          routing_data: res,
+          routing: `/${route}`
+        })
+        
+        
+      })
     this.setState({
       routing: route
     })
@@ -265,10 +281,12 @@ class App extends React.Component {
     // }
 
     return (
-      <div className="App">
+      <Router>
+        <div className="App">
         <div className="sidebar">
     </div>
-        <NavBar toggleOptions = {this.toggleOptions} 
+    {this.state.routing == '/' ? <>
+    <NavBar toggleOptions = {this.toggleOptions} 
         getSearchQuery={this.getSearchQuery} 
         searchResult={this.state.searching ? this.state.search_items : []}
         search_found={this.state.search_found}
@@ -294,8 +312,14 @@ class App extends React.Component {
         <Slider/>
         </>
         }
+    </> : 
+    <ListPage className='list' route={this.state.routing} data={this.state.routing_data}/>
+      }
+        
         
       </div>
+      </Router>
+      
     // <CoroplethMap/>
     );
   }

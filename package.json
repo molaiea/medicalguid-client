@@ -20,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.0",
     "react-leaflet-draw": "^0.20.4",
+    "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.0",
     "react-simple-star-rating": "^5.1.7",

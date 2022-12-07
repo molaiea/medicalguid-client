@@ -28,7 +28,7 @@ const InfoSideComponent = ({showinfo, info, handleClose, routingClick}) => {
           <Offcanvas.Title>Détails</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className='sidebar'>
-            <img src={info.table == 'clinics' ? require('../../assets/photos/clinics/clinic.jpg') : 
+            <img className='info_img' src={info.table == 'clinics' ? require('../../assets/photos/clinics/clinic.jpg') : 
             info.table == 'transfusion' ? require('../../assets/photos/transfusion/transfusion.png') : 
             info.table == 'pharmacies' ? require('../../assets/photos/pharmacies/images.jpg') :
             info.table == 'opticians' ? require('../../assets/photos/opticians/opticien.jpg') : 
