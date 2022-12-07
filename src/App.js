@@ -19,7 +19,7 @@ class App extends React.Component {
       clinics: [],
       pharmacies: [],
       dentists: [],
-      labos: [],
+      laboratories: [],
       opticians: [],
       transfusion: [],
       marker_clicked: false,
@@ -52,7 +52,7 @@ class App extends React.Component {
       )
   }
   function positionError(error) {
-      if (error.PERMISSION_DENIED) {alert('Location services are off. Please enable location services, or use zip code search.');}
+      if (error.PERMISSION_DENIED) {alert('Veuillez autoriser votre localisation!');}
 
   }
   }
@@ -60,14 +60,13 @@ class App extends React.Component {
     if(e!=0){
       if(this.state.selected_options.length == 0)
     {
-      console.log(this.state.user_position)
       var mytables = ['clinics', 'pharmacies', 'dentists', 'laboratories', 'opticians', 'transfusion']
       mytables.map((item, idx)=>{
         fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=${item}&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
       {method: 'get'})
       .then(res=>res.json())
       .then(res=>{      
-        this.state.buffer_result.push({data: res, icon: Icons["clinics"]})
+        this.state.buffer_result.push({data: res, icon: Icons[item]})
       }).then(()=>{
         this.setState({
           search_by_buffer: true,
@@ -76,17 +75,16 @@ class App extends React.Component {
     }
     
     )
-    console.log(this.state.buffer_result)
     
   }
     else{
       this.state.selected_options.forEach((item, idx)=>{
-        fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=${item}&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
+        fetch(`https://medicalguide-api-production.up.railway.app/api/get/searchbybuffer?buffer=${e}&table=${item.value}&center=${this.state.user_position[0]},${this.state.user_position[1]}`, 
     {method: 'get'})
     .then(res=>res.json())
     .then(res=>{      
       console.log(res)
-      this.state.buffer_result.push({data: res, icon: Icons[item]})
+      this.state.buffer_result.push({data: res, icon: Icons[item.value]})
       this.setState({
         search_by_buffer: true,
       })
@@ -205,7 +203,7 @@ class App extends React.Component {
         clinics: res.clinics_res,
         pharmacies: res.pharmacies_res,
         dentists: res.dentists_res,
-        labos: res.laboratories_res,
+        laboratories: res.laboratories_res,
         opticians: res.opticians_res,
         transfusion: res.transfusion_res,
         is_loaded: 1,
@@ -225,7 +223,7 @@ class App extends React.Component {
     var data = [{data: this.state.clinics, icon: Icons['clinics']},
                   {data: this.state.pharmacies, icon: Icons['pharmacies']}, 
                   {data: this.state.dentists, icon: Icons['dentists']}, 
-                  {data: this.state.labos, icon: Icons['labos']}, 
+                  {data: this.state.laboratories, icon: Icons['laboratories']}, 
                   {data: this.state.opticians, icon: Icons['opticians']}, 
                   {data: this.state.transfusion, icon: Icons['transfusion']}]
     $(".map_container").on('click', ()=>{
@@ -235,6 +233,7 @@ class App extends React.Component {
     $("#buffer_button").on('click', ()=>{
       $("#buffer").css("visibility", "visible")
       $("#buffer").css("margin-left", "10px")
+      $('#buffer_button').html('Cliquez entrer pour valider')
         this.getUserPosition()
     })
         

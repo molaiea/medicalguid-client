@@ -29,7 +29,7 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
   const categories = [
     { value: "clinics", label: "Cliniques" },
     { value: "dentists", label: "Dentistes" },
-    { value: "labos", label: "Laboratoires" },
+    { value: "laboratories", label: "Laboratoires" },
     { value: "opticians", label: "Opticiens" },
     { value: "pharmacies", label: "Pharmacies" },
     { value: "transfusion", label: "Centres de transfusion sanguine" }

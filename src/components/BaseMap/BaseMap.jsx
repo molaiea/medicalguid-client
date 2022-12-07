@@ -67,7 +67,7 @@ const POSITION_CLASSES = {
           scrollWheelZoom={false}
           attributionControl={false}
           zoomControl={false}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer url="https://api.mapbox.com/styles/v1/nafissa1809/clbcvdaxm002914o0nj4d8kc0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmFmaXNzYTE4MDkiLCJhIjoiY2xiYTFtZDJkMTBlZjNxcWh1aHdwbnp0aCJ9.OBCk9K8H_5L_JfgvBgT8jQ" />
           <MinimapBounds parentMap={parentMap} zoom={mapZoom} />
         </MapContainer>
       ),
@@ -90,7 +90,7 @@ const POSITION_CLASSES = {
   return (
       <MapContainer className="map_container" center={[33.9594653,-6.8528503]} zoom={11} scrollWheelZoom={true}>
         <TileLayer
-          url="https://api.mapbox.com/styles/v1/nafissa1809/clba1nbmd000s14pidvnzn2fx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmFmaXNzYTE4MDkiLCJhIjoiY2xiYTFtZDJkMTBlZjNxcWh1aHdwbnp0aCJ9.OBCk9K8H_5L_JfgvBgT8jQ"
+          url="https://api.mapbox.com/styles/v1/nafissa1809/clbcvdaxm002914o0nj4d8kc0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmFmaXNzYTE4MDkiLCJhIjoiY2xiYTFtZDJkMTBlZjNxcWh1aHdwbnp0aCJ9.OBCk9K8H_5L_JfgvBgT8jQ"
         />
         {data.map(item=>{
           return (<MarkerClusterGroup key={data.indexOf(item)}>

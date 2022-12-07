@@ -29,7 +29,7 @@ var icon_transfusion = L.icon({
 const Icons = {
     clinics: icon_clinics,
     dentists: icon_dentists,
-    labos: icon_labos,
+    laboratories: icon_labos,
     opticians: icon_opticians,
     pharmacies: icon_pharmas,
     transfusion: icon_transfusion

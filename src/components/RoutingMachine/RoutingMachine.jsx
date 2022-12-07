@@ -18,7 +18,7 @@ import './RoutingMachine.css'
           {
             color: "blue",
             opacity: 0.8,
-            weight: 4
+            weight: 3
           }
         ]
       },

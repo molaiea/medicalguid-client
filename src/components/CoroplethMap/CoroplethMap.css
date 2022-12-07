@@ -10,7 +10,7 @@
     visibility: hidden;
 } */
 
-.leaflet-interactive{
+/* .leaflet-interactive{
     stroke: rgb(0, 0, 0);
     stroke-width: 1;
     stroke-linecap: round;
@@ -18,7 +18,7 @@
 }
 .leaflet-interactive:hover{
     stroke-width: 3;
-}
+} */
 
 .legende {
     z-index: 9999;
