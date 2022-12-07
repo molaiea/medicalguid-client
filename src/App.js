@@ -7,6 +7,7 @@ import InfoSideComponent from './components/InfoSideComponent/InfoSideComponent'
 import Icons from './components/Icons/Icons';
 import $ from 'jquery';
 import Slider from './components/Slider/Slider';
+import ListPage from './components/ListPage/ListPage';
 class App extends React.Component {
 
   constructor(){
@@ -38,10 +39,16 @@ class App extends React.Component {
       buffer_radius: 0,
       search_by_buffer: false,
       user_position: [],
-      buffer_result: []
+      buffer_result: [],
+      routing: '/'
     }
   }
 
+  handleRoutingChange = (route)=>{
+    this.setState({
+      routing: route
+    })
+  }
   getUserPosition = ()=>{
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -66,7 +73,7 @@ class App extends React.Component {
       {method: 'get'})
       .then(res=>res.json())
       .then(res=>{      
-        this.state.buffer_result.push({data: res, icon: Icons[item]})
+        this.state.buffer_result.push({data: res, icon: Icons[item], name:item})
       }).then(()=>{
         this.setState({
           search_by_buffer: true,
@@ -84,7 +91,7 @@ class App extends React.Component {
     .then(res=>res.json())
     .then(res=>{      
       console.log(res)
-      this.state.buffer_result.push({data: res, icon: Icons[item.value]})
+      this.state.buffer_result.push({data: res, icon: Icons[item.value], name:item.value})
       this.setState({
         search_by_buffer: true,
       })
@@ -220,12 +227,12 @@ class App extends React.Component {
 
   };
   render() {
-    var data = [{data: this.state.clinics, icon: Icons['clinics']},
-                  {data: this.state.pharmacies, icon: Icons['pharmacies']}, 
-                  {data: this.state.dentists, icon: Icons['dentists']}, 
-                  {data: this.state.laboratories, icon: Icons['laboratories']}, 
-                  {data: this.state.opticians, icon: Icons['opticians']}, 
-                  {data: this.state.transfusion, icon: Icons['transfusion']}]
+    var data = [{data: this.state.clinics, icon: Icons['clinics'], name:"clinics"},
+                  {data: this.state.pharmacies, icon: Icons['pharmacies'], name:"pharmacies"}, 
+                  {data: this.state.dentists, icon: Icons['dentists'], name:"dentists"}, 
+                  {data: this.state.laboratories, icon: Icons['laboratories'], name: "laboratories"}, 
+                  {data: this.state.opticians, icon: Icons['opticians'], name:"opticians"}, 
+                  {data: this.state.transfusion, icon: Icons['transfusion'], name:"transfusion"}]
     $(".map_container").on('click', ()=>{
       
       document.getElementsByClassName("search_container")[0].style.visibility = "hidden";
@@ -244,13 +251,13 @@ class App extends React.Component {
     if(this.state.searching){
       var data = []
       for ( const prop in this.state.search_items) {
-        data.push({data: this.state.search_items[prop], icon: Icons[prop]})
+        data.push({data: this.state.search_items[prop], icon: Icons[prop], name:prop})
       }
     } else{
       if(this.state.toggle_cat == 1){
         var data = []
       this.state.selected_options.forEach((item, i)=>{
-        data.push({data: this.state[this.state.selected_options[i].value], icon: Icons[item.value]})
+        data.push({data: this.state[this.state.selected_options[i].value], icon: Icons[item.value], name: item.value})
       })
       }
     }
@@ -267,7 +274,9 @@ class App extends React.Component {
         search_found={this.state.search_found}
         onSearchFound={this.onSearchFound}
         getBuffer={this.getBuffer}
-        handleBufferChange={this.handleBufferChange}/>
+        handleBufferChange={this.handleBufferChange}
+        handleRouting={this.handleRoutingChange}/>
+        {/* <ListPage data={data}/> */}
         {this.state.is_loaded == 0 ? <LoadingPage/> : 
         <>
         <InfoSideComponent scroll="true" backdrop="false" 

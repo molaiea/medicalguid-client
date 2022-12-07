@@ -99,7 +99,10 @@ const POSITION_CLASSES = {
               position={[e.lat, e.lng]}
               eventHandlers={{
                 click: (i) => {
-                  handleMarkerClick(e)
+                  const myobject = {id: e.id, name: e.name, address: e.address, 
+                    phone: e.phone, rating: e.rating, table: item.name}
+                  console.log(myobject)
+                  handleMarkerClick(myobject)
                 },
               }} />)
             })}

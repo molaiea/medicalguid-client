@@ -25,7 +25,7 @@ const Option = (props) => {
   );
 };
 
-function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound, handleBufferChange, getBuffer}) {
+function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSearchFound, handleBufferChange, getBuffer, handleRouting}) {
   const categories = [
     { value: "clinics", label: "Cliniques" },
     { value: "dentists", label: "Dentistes" },
@@ -67,13 +67,13 @@ function NavBar({toggleOptions, getSearchQuery, searchResult, search_found, onSe
               title="Détails"
               menuVariant="dark"
             >
-              <NavDropdown.Item href="#action/3.1">
-              <Nav.Link href="#features">Cliniques</Nav.Link>
+              <NavDropdown.Item>
+              <Nav.Link>Cliniques</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-              <Nav.Link href="#features">Pharmacies</Nav.Link>
+              <NavDropdown.Item>
+              <Nav.Link>Pharmacies</Nav.Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item>
               <Nav.Link href="#features">Dentistes</Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">
